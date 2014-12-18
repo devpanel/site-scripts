@@ -13,6 +13,19 @@ error() {
 unset n_users time site_addr
 getopt_flags='t:c:'
 
+# compatibility variables for /scripts page
+n_time='%%n_time%%'
+n_users='%%n_users%%'
+site_addr='%%site_addr%%'
+
+for tmp_var in n_time n_users site_addr; do
+  # cleanup all variables above if they start with %%
+  # this is a way to make it compatible with the /scripts page
+  tmp_value=${!tmp_var}
+  tmp_value=${tmp_value##\%\%*}
+  [ -z "$tmp_value" ] && unset "$tmp_var"
+done
+
 while getopts $getopt_flags OPTN; do
   case $OPTN in
     t)
