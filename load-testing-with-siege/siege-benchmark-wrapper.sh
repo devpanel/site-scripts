@@ -10,7 +10,7 @@ error() {
 }
 
 # main
-unset n_users time site_addr
+unset n_users n_time site_addr
 getopt_flags='t:c:'
 
 # compatibility variables for /scripts page
