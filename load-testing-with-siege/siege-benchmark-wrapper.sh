@@ -2,6 +2,20 @@
 #
 # This script runs a siege benchmark test on the target site
 
+usage() {
+  local prog=$(basename "$0")
+
+  echo "Usage: $prog [options] <site_address>
+
+  Options:
+    -t time     duration of the test, in seconds
+    -c number   number of simultaneous users to simulate
+
+  This script runs a load test with siege on the specified URL.
+"
+  exit 1
+}
+
 error() {
   local msg="$1"
 
@@ -10,6 +24,8 @@ error() {
 }
 
 # main
+[ $# -eq 0 ] && usage
+
 unset n_users n_time site_addr
 getopt_flags='t:c:'
 
@@ -37,7 +53,9 @@ while getopts $getopt_flags OPTN; do
   esac
 done
 [ $OPTIND -gt 1 ] && shift $(( $OPTIND - 1 ))
-[ -n "$1" ] && site_addr="$1"
+[ -z "$1" ] && usage
+
+site_addr="$1"
 
 while [ -z "$n_time" ]; do
   read -p "For how long to test (e.g. 30S, 3M, 5M)? " n_time
